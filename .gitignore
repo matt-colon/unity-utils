@@ -47,5 +47,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
-# GitHub for Unity
-Assets/Plugins/GitHub/
+# Plugins
+Assets/Plugins.meta
+Assets/Plugins/
