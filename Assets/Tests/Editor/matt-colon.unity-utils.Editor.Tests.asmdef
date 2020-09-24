@@ -1,0 +1,14 @@
+﻿{
+	"name": "matt-colon.unity-utils.Editor.Tests",
+  "references": [
+    "matt-colon.unity-utils.Editor",
+    "matt-colon.unity-utils"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
