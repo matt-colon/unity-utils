@@ -8,60 +8,60 @@ namespace Tests {
     [Test]
     public void TestGetPositionVector() {
       float tileWidth = 0.08f;
-      Vector3Int tileCoordinates = new Vector3Int(0, 0, 0);
-      Vector3 positionVector = SuperMapUtils.GetPositionVector(tileCoordinates, tileWidth);
+      Vector3Int tileCoordinate = new Vector3Int(0, 0, 0);
+      Vector3 positionVector = SuperMapUtils.GetPositionVector(tileCoordinate, tileWidth);
       Assert.AreEqual(new Vector3(0, 0, 0), positionVector);
 
-      tileCoordinates = new Vector3Int(4, 4, 0);
-      positionVector = SuperMapUtils.GetPositionVector(tileCoordinates, tileWidth);
+      tileCoordinate = new Vector3Int(4, 4, 0);
+      positionVector = SuperMapUtils.GetPositionVector(tileCoordinate, tileWidth);
       Assert.AreEqual(new Vector3(0.32f, 0.32f, 0), positionVector);
 
       tileWidth = 0.16f;
-      tileCoordinates = new Vector3Int(4, 4, 0);
-      positionVector = SuperMapUtils.GetPositionVector(tileCoordinates, tileWidth);
+      tileCoordinate = new Vector3Int(4, 4, 0);
+      positionVector = SuperMapUtils.GetPositionVector(tileCoordinate, tileWidth);
       Assert.AreEqual(new Vector3(0.64f, 0.64f, 0), positionVector);
 
       tileWidth = 0.32f;
-      tileCoordinates = new Vector3Int(4, 4, 0);
-      positionVector = SuperMapUtils.GetPositionVector(tileCoordinates, tileWidth);
+      tileCoordinate = new Vector3Int(4, 4, 0);
+      positionVector = SuperMapUtils.GetPositionVector(tileCoordinate, tileWidth);
       Assert.AreEqual(new Vector3(1.28f, 1.28f, 0), positionVector);
     }
 
     [Test]
     public void TestGetAdjacentTileCoordinate() {
       // Adjacent tile coordinate above
-      Vector3Int tileCoordinates = new Vector3Int(0, 0, 0);
+      Vector3Int tileCoordinate = new Vector3Int(0, 0, 0);
       Vector3 directionalVector = new Vector3(0, 1, 0);
-      Vector3Int adjacentTileCoordinates = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinates, directionalVector);
-      Assert.AreEqual(new Vector3Int(0, 1, 0), adjacentTileCoordinates);
+      Vector3Int adjacentTileCoordinate = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinate, directionalVector);
+      Assert.AreEqual(new Vector3Int(0, 1, 0), adjacentTileCoordinate);
 
       // Adjacent tile coordinate below
       directionalVector = new Vector3(0, -1, 0);
-      adjacentTileCoordinates = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinates, directionalVector);
-      Assert.AreEqual(new Vector3Int(0, -1, 0), adjacentTileCoordinates);
+      adjacentTileCoordinate = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinate, directionalVector);
+      Assert.AreEqual(new Vector3Int(0, -1, 0), adjacentTileCoordinate);
 
       // Adjacent tile coordinate to the left
       directionalVector = new Vector3(-1, 0, 0);
-      adjacentTileCoordinates = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinates, directionalVector);
-      Assert.AreEqual(new Vector3Int(-1, 0, 0), adjacentTileCoordinates);
+      adjacentTileCoordinate = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinate, directionalVector);
+      Assert.AreEqual(new Vector3Int(-1, 0, 0), adjacentTileCoordinate);
 
       // Adjacent tile coordinate to the right
       directionalVector = new Vector3(1, 0, 0);
-      adjacentTileCoordinates = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinates, directionalVector);
-      Assert.AreEqual(new Vector3Int(1, 0, 0), adjacentTileCoordinates);
+      adjacentTileCoordinate = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinate, directionalVector);
+      Assert.AreEqual(new Vector3Int(1, 0, 0), adjacentTileCoordinate);
 
-      // Adjacent tile coordinates with non-axis-aligned directional vector
+      // Adjacent tile coordinate with non-axis-aligned directional vector
       directionalVector = new Vector3(1, 0.25f, 0);
-      adjacentTileCoordinates = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinates, directionalVector);
-      Assert.AreEqual(new Vector3Int(1, 0, 0), adjacentTileCoordinates);
+      adjacentTileCoordinate = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinate, directionalVector);
+      Assert.AreEqual(new Vector3Int(1, 0, 0), adjacentTileCoordinate);
 
-      // Adjacent tile coordinates with bias towards axis-aligning to the x axis
+      // Adjacent tile coordinate with bias towards axis-aligning to the x axis
       directionalVector = new Vector3(1, 1, 0);
-      adjacentTileCoordinates = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinates, directionalVector);
-      Assert.AreEqual(new Vector3Int(1, 0, 0), adjacentTileCoordinates);
+      adjacentTileCoordinate = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinate, directionalVector);
+      Assert.AreEqual(new Vector3Int(1, 0, 0), adjacentTileCoordinate);
       directionalVector = new Vector3(-1, -1, 0);
-      adjacentTileCoordinates = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinates, directionalVector);
-      Assert.AreEqual(new Vector3Int(-1, 0, 0), adjacentTileCoordinates);
+      adjacentTileCoordinate = SuperMapUtils.GetAdjacentTileCoordinate(tileCoordinate, directionalVector);
+      Assert.AreEqual(new Vector3Int(-1, 0, 0), adjacentTileCoordinate);
     }
 
     [Test]
@@ -122,9 +122,9 @@ namespace Tests {
       bool[,] boundaryMap = CreateTestBoundaryMap();
 
       // Rightward
-      Vector3Int startingTileCoordinates = new Vector3Int(1, -1, 0);
+      Vector3Int startingTileCoordinate = new Vector3Int(1, -1, 0);
       Vector3 directionalVector = new Vector3(1, 0, 0);
-      List<Vector3Int> path = SuperMapUtils.GetTileCoordinatePathUntilBoundary(boundaryMap, startingTileCoordinates, directionalVector);
+      List<Vector3Int> path = SuperMapUtils.GetTileCoordinatePathUntilBoundary(boundaryMap, startingTileCoordinate, directionalVector);
       Assert.AreEqual(4, path.Count);
       Assert.AreEqual(new Vector3Int(2, -1, 0), path[0]);
       Assert.AreEqual(new Vector3Int(3, -1, 0), path[1]);
@@ -132,9 +132,9 @@ namespace Tests {
       Assert.AreEqual(new Vector3Int(5, -1, 0), path[3]);
 
       // Downward
-      startingTileCoordinates = new Vector3Int(5, -1, 0);
+      startingTileCoordinate = new Vector3Int(5, -1, 0);
       directionalVector = new Vector3(0, -1, 0);
-      path = SuperMapUtils.GetTileCoordinatePathUntilBoundary(boundaryMap, startingTileCoordinates, directionalVector);
+      path = SuperMapUtils.GetTileCoordinatePathUntilBoundary(boundaryMap, startingTileCoordinate, directionalVector);
       Assert.AreEqual(4, path.Count);
       Assert.AreEqual(new Vector3Int(5, -2, 0), path[0]);
       Assert.AreEqual(new Vector3Int(5, -3, 0), path[1]);
@@ -142,9 +142,9 @@ namespace Tests {
       Assert.AreEqual(new Vector3Int(5, -5, 0), path[3]);
 
       // Leftward
-      startingTileCoordinates = new Vector3Int(5, -5, 0);
+      startingTileCoordinate = new Vector3Int(5, -5, 0);
       directionalVector = new Vector3(-1, 0, 0);
-      path = SuperMapUtils.GetTileCoordinatePathUntilBoundary(boundaryMap, startingTileCoordinates, directionalVector);
+      path = SuperMapUtils.GetTileCoordinatePathUntilBoundary(boundaryMap, startingTileCoordinate, directionalVector);
       Assert.AreEqual(4, path.Count);
       Assert.AreEqual(new Vector3Int(4, -5, 0), path[0]);
       Assert.AreEqual(new Vector3Int(3, -5, 0), path[1]);
@@ -152,9 +152,9 @@ namespace Tests {
       Assert.AreEqual(new Vector3Int(1, -5, 0), path[3]);
 
       // Upward
-      startingTileCoordinates = new Vector3Int(1, -5, 0);
+      startingTileCoordinate = new Vector3Int(1, -5, 0);
       directionalVector = new Vector3(0, 1, 0);
-      path = SuperMapUtils.GetTileCoordinatePathUntilBoundary(boundaryMap, startingTileCoordinates, directionalVector);
+      path = SuperMapUtils.GetTileCoordinatePathUntilBoundary(boundaryMap, startingTileCoordinate, directionalVector);
       Assert.AreEqual(4, path.Count);
       Assert.AreEqual(new Vector3Int(1, -4, 0), path[0]);
       Assert.AreEqual(new Vector3Int(1, -3, 0), path[1]);
