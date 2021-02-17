@@ -48,7 +48,70 @@ namespace MCUU.SuperTiled2Unity {
     /// A vector representing the position of the tile coordinates in the 2D world space.
     /// </returns>
     public static Vector3 GetPositionVector(Vector3Int tileCoordinates, float tileWidth) {
-      return new Vector3((tileCoordinates.x * tileWidth) + (tileWidth / 2), (tileCoordinates.y * tileWidth) - (tileWidth / 2), 0);
+      return new Vector3(tileCoordinates.x * tileWidth, tileCoordinates.y * tileWidth, 0);
+    }
+
+    /// <summary>
+    /// Finds the tile coordinate adjacent to a tile coordinate in the given direction.
+    /// </summary>
+    /// <param name="tileCoordinates">
+    /// The tile coordinates in the tilemap.
+    /// </param>
+    /// <param name="directionalVector">
+    /// The direction to look for the adjacent tile coordinate.
+    /// </param>
+    /// <returns>
+    /// The adjacent tile coordinates in the given direction.
+    /// </returns>
+    public static Vector3Int GetAdjacentTileCoordinate(Vector3Int tileCoordinates, Vector3 directionalVector) {
+      // Get the adjacent tile coordinates in the direction of the given vector
+      Vector3Int axisAlignedDirectionalVector = new Vector3Int(0, 0, 0);
+      if (directionalVector.x != 0) {
+        axisAlignedDirectionalVector.x += directionalVector.x > 0 ? 1 : -1;
+      } else if (directionalVector.y != 0) {
+        axisAlignedDirectionalVector.y += directionalVector.y > 0 ? 1 : -1;
+      }
+      return tileCoordinates + axisAlignedDirectionalVector;
+    }
+
+    /// <summary>
+    /// Finds the tile object adjacent to a tile coordinate in the given direction.
+    /// </summary>
+    /// <param name="tilemap">
+    /// The tilemap to reference.
+    /// </param>
+    /// <param name="tileCoordinates">
+    /// The tile coordinates in the tilemap.
+    /// </param>
+    /// <param name="directionalVector">
+    /// The direction to look for the adjacent tile object.
+    /// </param>
+    /// <returns>
+    /// The adjacent tile object in the given direction.
+    /// </returns>
+    private static TileBase GetAdjacentTileBase(Tilemap tilemap, Vector3Int tileCoordinates, Vector3 directionalVector) {
+      Vector3Int adjacentTileCoordinates = GetAdjacentTileCoordinate(tileCoordinates, directionalVector);
+      return tilemap.GetTile(adjacentTileCoordinates);
+    }
+
+    /// <summary>
+    /// Returns true if the tile adjacent to a tile coordinate in the given direction is empty.
+    /// </summary>
+    /// <param name="tilemap">
+    /// The tilemap to reference.
+    /// </param>
+    /// <param name="tileCoordinates">
+    /// The tile coordinates in the tilemap.
+    /// </param>
+    /// <param name="directionalVector">
+    /// The direction to look for the adjacent tile object.
+    /// </param>
+    /// <returns>
+    /// True if the adjacent tile object in the given direction is empty.
+    /// </returns>
+    // Returns the tile from the given tilemap that is adjacent to the player in a given direction
+    public static bool IsAdjacentTileEmpty(Tilemap tilemap, Vector3Int tileCoordinates, Vector3 directionalVector) {
+      return GetAdjacentTileBase(tilemap, tileCoordinates, directionalVector) == null;
     }
 
     /// <summary>
@@ -79,6 +142,38 @@ namespace MCUU.SuperTiled2Unity {
       Point destinationPoint = new Point(destinationTileCoordinates.x, destinationTileCoordinates.y);
       List<Point> pathPoints = Pathfinding.FindPath(boundaryGrid, startingPoint, destinationPoint, Pathfinding.DistanceType.Manhattan);
       return ConvertToTileCoordinates(pathPoints);
+    }
+
+    /// <summary>
+    /// Finds a path of tile coordinates between the given starting (exclusive) and
+    /// the first boundary encountered (exclusive) in the given direction.
+    /// </summary>
+    /// <param name="boundaryMap">
+    /// A two-dimentional bool array created from <see cref="CreateBoundaryMap"/>.
+    /// </param>
+    /// <param name="startingTileCoordinates">
+    /// The tile coordinates of where to start the pathfinding.
+    /// </param>
+    /// <param name="directionalVector">
+    /// The direction to look for the adjacent tile object.
+    /// </param>
+    /// <returns>
+    /// A list of tile coordinates representing the path to the first boundary encountered.
+    /// </returns>
+    public static List<Vector3Int> GetTileCoordinatePathUntilBoundary(bool[,] boundaryMap, Vector3Int startingTileCoordinates, Vector3 directionalVector) {
+      int offsetX = directionalVector.x > 0 ? 1 : directionalVector.x < 0 ? -1 : 0;
+      int offsetY = directionalVector.y > 0 ? 1 : directionalVector.y < 0 ? -1 : 0;
+      Vector3Int offset = new Vector3Int(offsetX, offsetY, 0);
+
+      List<Vector3Int> path = new List<Vector3Int>();
+      Vector3Int currentTile = startingTileCoordinates + offset;
+
+      while (boundaryMap[currentTile.x, -currentTile.y]) {
+        path.Add(new Vector3Int(currentTile.x, currentTile.y, 0));
+        currentTile += offset;
+      }
+
+      return path;
     }
 
     /// <summary>
